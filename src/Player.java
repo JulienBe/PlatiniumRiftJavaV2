@@ -656,7 +656,6 @@ class Zone {
         if (futurDrones == 0 && Utils.isFree(this))
             value += platinium * MULTI_PT_IF_FREE_N_NO_FUTURE_DRONE;
 
-
         value *= 7 - adjacentZones.size();
         if (Utils.isMine(this) && Utils.hasEnemiesNearby(this))
             value *= (platinium*2) + 1;
