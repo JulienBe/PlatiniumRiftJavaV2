@@ -639,7 +639,8 @@ class Zone {
         if (Utils.allAdjacentAreMine(this) && continent.drones[Player.myId] > 30)
             return -1;
         int value = 0;
-
+        if (continent.futurDrones == 0)
+            value += 10;
         for (Zone z : adjacentWithRessources) {
             if (!Utils.hasEnemies(z) && !Utils.isMine(z)) {
                 value += (z.platinium * 2) / (1 + z.futurDrones);
@@ -658,7 +659,7 @@ class Zone {
 
         value *= 7 - adjacentZones.size();
         if (Utils.isMine(this) && Utils.hasEnemiesNearby(this))
-            value *= platinium + 1;
+            value *= (platinium*2) + 1;
         else
             value /= Utils.getNbEnemieZonesNearby(this) + 1;
         value /= futurDrones*2 + 1;
