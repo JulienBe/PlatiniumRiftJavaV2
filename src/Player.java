@@ -685,11 +685,10 @@ class Zone implements Comparable<Zone> {
             z.examineZone(drones, candidates, adjacent, newIds);
     }
 
-    private int getMagnetism() {
+    private float getMagnetism() {
         if (Utils.getOtherPlayerActive(adjacentDrones) > 1)
             return -1;
-        int i = -futurDrones;
-        i -= targetted;
+        float i = 0;
         if (Utils.isMine(this)) {
             if (Utils.isBorder(this))
                 i++;
@@ -699,6 +698,8 @@ class Zone implements Comparable<Zone> {
             i += 10;
         if (!Utils.hasEnemies(this))
             i += 5 + platinium * 5;
+        i /= futurDrones + 1;
+        i /= (targetted / 2f) + 1;
         //i /= futurDrones + 1;
         return i;
     }
