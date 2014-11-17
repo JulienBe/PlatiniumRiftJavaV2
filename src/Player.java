@@ -664,8 +664,6 @@ class Zone {
         if (continent.drones[Player.myId] == 0)
             value *= 2;
 
-        if (continent.futurDrones == 0 && continent.drones[Player.myId] == 0)
-            value += continent.ressources * 5;
         return value;
 //
 //        int value = 0;

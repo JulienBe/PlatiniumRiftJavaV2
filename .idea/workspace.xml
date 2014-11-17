@@ -28,9 +28,14 @@
       <file leaf-file-name="Player.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.78507465" vertical-offset="11181" max-vertical-offset="19350">
-              <caret line="667" column="45" selection-start-line="0" selection-start-column="0" selection-end-line="1089" selection-end-column="0" />
-              <folding />
+            <state vertical-scroll-proportion="0.74726367" vertical-offset="9995" max-vertical-offset="18108">
+              <caret line="666" column="21" selection-start-line="666" selection-start-column="21" selection-end-line="666" selection-end-column="21" />
+              <folding>
+                <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+                <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+                <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+                <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -392,9 +397,54 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/Player.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="18144">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/PlayerV3.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="9044" max-vertical-offset="19314">
+          <caret line="536" column="34" selection-start-line="536" selection-start-column="34" selection-end-line="536" selection-end-column="34" />
+          <folding>
+            <element signature="e#18492#18493#0" expanded="true" />
+            <element signature="e#18536#18537#0" expanded="true" />
+            <element signature="e#26826#26827#0" expanded="true" />
+            <element signature="e#26897#26898#0" expanded="true" />
+            <element signature="e#29470#29471#0" expanded="true" />
+            <element signature="e#29542#29543#0" expanded="true" />
+            <element signature="e#29812#29813#0" expanded="true" />
+            <element signature="e#29860#29861#0" expanded="true" />
+            <element signature="e#30277#30278#0" expanded="true" />
+            <element signature="e#30339#30340#0" expanded="true" />
+            <element signature="e#30502#30503#0" expanded="true" />
+            <element signature="e#30540#30541#0" expanded="true" />
+            <element signature="e#30560#30561#0" expanded="true" />
+            <element signature="e#30592#30593#0" expanded="true" />
+            <element signature="e#30654#30655#0" expanded="true" />
+            <element signature="e#30700#30701#0" expanded="true" />
+            <element signature="e#37147#37148#0" expanded="true" />
+            <element signature="e#37196#37197#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="19458">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -429,7 +479,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="17154">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -437,7 +492,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="17172">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -445,7 +505,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="17550">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -453,7 +518,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="16380">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -461,7 +531,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="16380">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -469,7 +544,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="13608">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -477,7 +557,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="12240">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -485,7 +570,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="12510">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -493,7 +583,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="14292">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -501,7 +596,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="13968">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -534,9 +634,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.78507465" vertical-offset="11181" max-vertical-offset="19350">
-          <caret line="667" column="45" selection-start-line="0" selection-start-column="0" selection-end-line="1089" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.74726367" vertical-offset="9995" max-vertical-offset="18108">
+          <caret line="666" column="21" selection-start-line="666" selection-start-column="21" selection-end-line="666" selection-end-column="21" />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
