@@ -378,8 +378,8 @@ class World {
 
         CommandSpawn commandSpawn = new CommandSpawn();
         commandSpawn.drones = 1;
-        if (Player.firstTurn)
-            commandSpawn.drones++;
+//        if (Player.firstTurn)
+//            commandSpawn.drones++;
         commandSpawn.to = candidate.zone.id;
 
         candidate.magnetism *= SPAWN_ATTRACTION_DIMINISHING;
