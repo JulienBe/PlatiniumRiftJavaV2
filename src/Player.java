@@ -298,12 +298,12 @@ class World {
         while (it.hasNext()) {
             Zone origin = it.next();
             int pop = 0;
-            int i = origin.podsToKeep();
-            for (; i < origin.getDrones(); i++) {
+            for (int i = origin.podsToKeep(); i < origin.getDrones(); i++) {
                 Zone zoneToGo = origin.getAdjacenToGoTo();
                 if (zoneToGo != null) {
                     pop++;
                     sendDrone(commands, origin, zoneToGo);
+                    zoneToGo.targetted++;
                     System.err.println("Adjacent : " + origin.id + " -> " + zoneToGo.id + " with future drones : " + zoneToGo.futurDrones);
                 }
             }
@@ -530,7 +530,7 @@ class Zone implements Comparable<Zone> {
     // /!\
     SpawnResolver spawnResolver = new SpawnResolver(this);
     final int id;
-    int platinium, ownerId = -1, platiniumNearby = 0, nbEnemies, futurDrones = 0;
+    int platinium, ownerId = -1, platiniumNearby = 0, nbEnemies, futurDrones = 0, targetted = 0;
     int[] drones = new int[4], adjacentDrones = new int[4];
     List<Zone> adjacentZones = new ArrayList<>(), adjacentWithRessources = new ArrayList<>(), adjacentOfAdjacentWithRessources = new ArrayList<>();
     boolean justBeenTaken = false;
@@ -565,14 +565,19 @@ class Zone implements Comparable<Zone> {
         drones[1] = podsP1;
         drones[2] = podsP2;
         drones[3] = podsP3;
-        futurDrones = 0;
-        nbEnemies = 0;
+        reset();
         for (int i = 0; i < drones.length; i++) {
             if (i == Player.myId)
                 continue;
             nbEnemies += drones[i];
         }
         return Utils.determineStatus(this);
+    }
+
+    private void reset() {
+        futurDrones = 0;
+        nbEnemies = 0;
+        targetted = 0;
     }
 
     int getDrones() {
@@ -657,16 +662,6 @@ class Zone implements Comparable<Zone> {
             z.examineZone(getDrones(), candidates, z, id);
         if (candidates.size() > 0)
             return candidates.first();
-        int max = 0;
-        MagnetismResolver magnetismResolver = new MagnetismResolver();
-        for (Zone z : adjacentZones)
-            if (z.adjacentZones.size() > max) {
-                magnetismResolver.adjacent = z;
-                magnetismResolver.target = z;
-                max = z.adjacentZones.size();
-            }
-        if (magnetismResolver.adjacent != null)
-            return magnetismResolver;
         return null;
     }
 
@@ -694,11 +689,14 @@ class Zone implements Comparable<Zone> {
         if (Utils.getOtherPlayerActive(adjacentDrones) > 1)
             return -1;
         int i = -futurDrones;
+        i -= targetted;
         if (Utils.isMine(this)) {
             if (Utils.isBorder(this))
                 i++;
             return i;
         }
+        if (!Utils.isMine(this))
+            i += 10;
         if (!Utils.hasEnemies(this))
             i += 5 + platinium * 5;
         //i /= futurDrones + 1;
