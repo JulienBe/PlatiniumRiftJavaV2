@@ -719,7 +719,7 @@ class Zone implements Comparable<Zone> {
      **/
 
     public int evaluateFreeZone(int otherPlayerActive) {
-        if (Utils.allAdjacentAreMine(this) && otherPlayerActive == 1)
+        if (Utils.allAdjacentAreMine(this) && Player.playerCount == 2)
             return -1;
         int value = 0;
 
