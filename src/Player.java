@@ -7,7 +7,6 @@ import java.util.*;
  *    ██╔═══╝ ██║     ██╔══██║  ╚██╔╝  ██╔══╝  ██╔══██╗
  *    ██║     ███████╗██║  ██║   ██║   ███████╗██║  ██║
  *    ╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
- *
  */
 class Player {
 
@@ -99,7 +98,6 @@ class Player {
  *    ██║███╗██║██║   ██║██╔══██╗██║     ██║  ██║
  *    ╚███╔███╔╝╚██████╔╝██║  ██║███████╗██████╔╝
  *     ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝
- *
  */
 class World {
 
@@ -201,8 +199,6 @@ class World {
      *    | |\/| |/ _ \ \ / / _ \ '_ ` _ \ / _ \ '_ \| __/ __|
      *    | |  | | (_) \ V /  __/ | | | | |  __/ | | | |_\__ \
      *    \_|  |_/\___/ \_/ \___|_| |_| |_|\___|_| |_|\__|___/
-     *
-     *
      */
     void movements() {
         List<CommandMvt> commands = new ArrayList<>();
@@ -472,7 +468,6 @@ class Continent {
      *           |_|
      */
 
-
     public ContinentSpawnAnalytic getSpawnAnalytics() {
         ContinentSpawnAnalytic spawnAnalytic = new ContinentSpawnAnalytic(this);
         for (Zone z : neutralZones.values())
@@ -488,20 +483,6 @@ class Continent {
         z.spawnResolver.magnetism = z.evaluateFreeZone(otherPlayersActive);
         return z.spawnResolver;
     }
-
-    /***
-     *     ___      ___     ______     ___      ___   _______   ___      ___   _______   _____  ___    ___________    ________
-     *    |"  \    /"  |   /    " \   |"  \    /"  | /"     "| |"  \    /"  | /"     "| (\"   \|"  \  ("     _   ")  /"       )
-     *     \   \  //   |  // ____  \   \   \  //  / (: ______)  \   \  //   |(: ______) |.\\   \    |  )__/  \\__/  (:   \___/
-     *     /\\  \/.    | /  /    ) :)   \\  \/. ./   \/    |    /\\  \/.    | \/    |   |: \.   \\  |     \\_ /      \___  \
-     *    |: \.        |(: (____/ //     \.    //    // ___)_  |: \.        | // ___)_  |.  \    \. |     |.  |       __/  \\
-     *    |.  \    /:  | \        /       \\   /    (:      "| |.  \    /:  |(:      "| |    \    \ |     \:  |      /" \   :)
-     *    |___|\__/|___|  \"_____/         \__/      \_______) |___|\__/|___| \_______)  \___|\____\)      \__|     (_______/
-     *
-     */
-
-
-
 
 }
 
@@ -626,7 +607,7 @@ class Zone implements Comparable<Zone> {
     public Zone getAdjacenToGoTo() {
         Zone zone = null;
         if (platinium > 0) {
-            if (Utils.hasEnemiesNearby(this) && futurDrones < Utils.getNbEnemyDronesNearby(this) + 2)
+            if (Utils.hasEnemiesNearby(this) && drones[Player.myId] < Utils.getNbEnemyDronesNearby(this) + 2)
                 return this;
         }
         if (Utils.getOtherPlayerActive(adjacentDrones) > 1)
@@ -669,8 +650,8 @@ class Zone implements Comparable<Zone> {
         for (int i : ids)
             if (i == id)
                 return;
-        if (Utils.getEnemieDrones(this.drones) >= drones)
-            return;
+//        if (Utils.getEnemieDrones(this.drones) >= drones)
+//            return;
         float magnetism = getMagnetism();
         int[] newIds = new int[ids.length + 1];
         System.arraycopy(ids, 0, newIds, 0, ids.length);
@@ -686,7 +667,7 @@ class Zone implements Comparable<Zone> {
     }
 
     private float getMagnetism() {
-        if (Utils.getOtherPlayerActive(adjacentDrones) > 1)
+        if (Utils.getOtherPlayerActive(adjacentDrones) > 1 && drones[Player.myId] < 5)
             return -1;
         float i = 0;
         if (Utils.isMine(this)) {
@@ -698,6 +679,8 @@ class Zone implements Comparable<Zone> {
             i += 10;
         if (!Utils.hasEnemies(this))
             i += 5 + platinium * 5;
+        else
+            i += platinium;
         i /= (futurDrones / 2f) + 1;
         i /= (targetted / 4f) + 1;
         //i /= futurDrones + 1;
@@ -720,8 +703,8 @@ class Zone implements Comparable<Zone> {
      **/
 
     public int evaluateFreeZone(int otherPlayerActive) {
-        if (Utils.allAdjacentAreMine(this) && Player.playerCount == 2)
-            return -1;
+//        if (Utils.allAdjacentAreMine(this) && Player.playerCount == 2)
+//            return -1;
         int value = 0;
 
         for (Zone z : adjacentWithRessources) {
@@ -748,6 +731,8 @@ class Zone implements Comparable<Zone> {
         value /= futurDrones * 2 + 1;
         if (continent.drones[Player.myId] == 0)
             value *= 2;
+        if (continent.zones.size() < 50 && Player.playerCount > 2)
+            value *= 2;
         return value;
     }
 
@@ -763,7 +748,6 @@ class Zone implements Comparable<Zone> {
             return 0;
         return getDrones() - spare;
     }
-
 
     public int additionnalDronesNeeded() {
         if (platinium == 0)
@@ -841,6 +825,12 @@ class CommandSpawn {
  *     ╚═════╝    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+
+class Proposition {
+    Zone origin;
+    List<Zone> destinations = new ArrayList<>();
+}
+
 class MagnetismResolver implements Comparable<MagnetismResolver>{
     float magnetism;
     Zone adjacent, target;
@@ -860,7 +850,7 @@ class MagnetismResolver implements Comparable<MagnetismResolver>{
     }
 }
 
-class ContinentSpawnAnalytic  implements Comparable<ContinentSpawnAnalytic> {
+class ContinentSpawnAnalytic implements Comparable<ContinentSpawnAnalytic> {
     TreeSet<SpawnResolver> candidates = new TreeSet<>();
     int totalValue;
     final Continent continent;
@@ -1127,9 +1117,7 @@ class Utils {
     public static int getOtherPlayerActive(int[] drones) {
         int players = 0;
         for (int i = 0; i < drones.length; i++) {
-            if (i == Player.myId)
-                continue;
-            if (drones[i] > 0)
+            if (i != Player.myId && drones[i] > 0)
                 players++;
         }
         return players;
