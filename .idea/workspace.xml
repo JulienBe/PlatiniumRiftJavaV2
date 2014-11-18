@@ -28,6 +28,7 @@
       <file leaf-file-name="Player.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Player.java">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state vertical-scroll-proportion="0.22587065" vertical-offset="12049" max-vertical-offset="21078">
               <caret line="682" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1165" selection-end-column="0" />
               <folding>
@@ -57,6 +58,15 @@
                 <element signature="e#36034#36035#0" expanded="true" />
                 <element signature="e#37732#37733#0" expanded="true" />
                 <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <state vertical-scroll-proportion="0.74726367" vertical-offset="9995" max-vertical-offset="18108">
+              <caret line="666" column="21" selection-start-line="666" selection-start-column="21" selection-end-line="666" selection-end-column="21" />
+              <folding>
+                <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+                <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+                <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+                <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
               </folding>
             </state>
           </provider>
@@ -298,22 +308,6 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
-    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
-      <option name="name" value="Go application" />
-      <option name="saveOutputToFile" value="false" />
-      <option name="showConsoleOnStdErr" value="false" />
-      <option name="showConsoleOnStdOut" value="false" />
-      <option name="scriptName" value="" />
-      <option name="scriptArguments" value="" />
-      <option name="builderArguments" value="" />
-      <option name="goBuildBeforeRun" value="false" />
-      <option name="goOutputDir" value="" />
-      <option name="workingDir" value="" />
-      <option name="envVars" value="" />
-      <option name="goVetEnabled" value="false" />
-      <module name="" />
-      <method />
-    </configuration>
     <configuration default="true" type="JarApplication" factoryName="JAR Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <envs />
@@ -360,27 +354,6 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="" />
       <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="GoTestConfiguration" factoryName="Go Test">
-      <option name="name" value="Go Test" />
-      <option name="saveOutputToFile" value="false" />
-      <option name="showConsoleOnStdErr" value="false" />
-      <option name="showConsoleOnStdOut" value="false" />
-      <option name="envVars" value="" />
-      <option name="testRunnerArgs" value="" />
-      <option name="testTargetType" value="Package" />
-      <option name="packageName" value="" />
-      <option name="packageDir" value="" />
-      <option name="testFile" value="" />
-      <option name="testArgs" value="" />
-      <option name="workingDir" value="" />
-      <option name="executeWhat" value="Test" />
-      <option name="filter" value="" />
-      <option name="useShortRun" value="false" />
-      <option name="testBeforeBenchmark" value="false" />
-      <option name="goVetEnabled" value="false" />
-      <module name="" />
       <method />
     </configuration>
     <list size="0" />
@@ -456,6 +429,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/Player.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="18342">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
@@ -547,6 +521,15 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="18144">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -583,6 +566,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="19458">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -609,6 +593,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -645,6 +635,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="17154">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -671,6 +662,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -680,6 +677,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="17172">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -706,6 +704,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -715,6 +719,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="17550">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -741,6 +746,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -750,6 +761,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="16380">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -776,6 +788,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -785,6 +803,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="16380">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -811,6 +830,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -820,6 +845,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="13608">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -846,6 +872,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -855,6 +887,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="12240">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -881,6 +914,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -890,6 +929,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="12510">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -916,6 +956,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -925,6 +971,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="14292">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -951,6 +998,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -960,6 +1013,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="13968">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+<<<<<<< HEAD
             <element signature="e#20624#20625#0" expanded="true" />
             <element signature="e#20666#20667#0" expanded="true" />
             <element signature="e#26699#26700#0" expanded="true" />
@@ -986,6 +1040,12 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
@@ -1019,6 +1079,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Player.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="0.22587065" vertical-offset="12049" max-vertical-offset="21078">
           <caret line="682" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1165" selection-end-column="0" />
           <folding>
@@ -1048,6 +1109,15 @@
             <element signature="e#36034#36035#0" expanded="true" />
             <element signature="e#37732#37733#0" expanded="true" />
             <element signature="e#37779#37780#0" expanded="true" />
+=======
+        <state vertical-scroll-proportion="0.74726367" vertical-offset="9995" max-vertical-offset="18108">
+          <caret line="666" column="21" selection-start-line="666" selection-start-column="21" selection-end-line="666" selection-end-column="21" />
+          <folding>
+            <element signature="method#getDistantToGoTo#0;class#Zone#0" expanded="false" />
+            <element signature="method#examineZone#0;class#Zone#0" expanded="false" />
+            <element signature="method#getMagnetism#0;class#Zone#0" expanded="false" />
+            <element signature="docComment;method#evaluateFreeZone#0;class#Zone#0" expanded="false" />
+>>>>>>> parent of e557c10... defender
           </folding>
         </state>
       </provider>
