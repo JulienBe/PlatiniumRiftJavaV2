@@ -24,6 +24,8 @@ class Player {
 
         while (true) {
             int platinum = in.nextInt(); // my available Platinum
+            if (firstTurn && playerCount > 2)
+                platinum *= 0.5f;
             in.nextLine();
             long begin = System.currentTimeMillis();
             /***
@@ -733,6 +735,8 @@ class Zone implements Comparable<Zone> {
             value *= 2;
         if (continent.zones.size() < 50 && Player.playerCount > 2)
             value *= 2;
+        if (Player.playerCount > 2 && Utils.isFree(this))
+            value *= 0.5f;
         return value;
     }
 
