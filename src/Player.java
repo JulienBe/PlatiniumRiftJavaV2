@@ -736,7 +736,7 @@ class Zone implements Comparable<Zone> {
         if (continent.zones.size() < 50 && Player.playerCount > 2)
             value *= 2;
         if (Player.playerCount > 2 && Utils.isFree(this))
-            value *= 0.5f;
+            value *= 0.75f;
         return value;
     }
 
