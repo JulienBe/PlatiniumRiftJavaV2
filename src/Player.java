@@ -866,6 +866,7 @@ class Zone implements Comparable<Zone> {
                 continue;
             possibilities.add(new AdjacentMvt(z, (1 + z.platinium) / z.adjacentZones.size()));
         }
+        Collections.sort(possibilities);
         return possibilities;
     }
 }
