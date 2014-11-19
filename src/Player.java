@@ -24,8 +24,8 @@ class Player {
 
         while (true) {
             int platinum = in.nextInt(); // my available Platinum
-            if (firstTurn && playerCount > 2)
-                platinum *= 0.5f;
+//            if (firstTurn && playerCount > 2)
+//                platinum *= 0.5f;
             in.nextLine();
             long begin = System.currentTimeMillis();
             /***
@@ -207,7 +207,7 @@ class World {
         /**
          * REINFORCEMENT
          */
-        reinforcement(commands);
+//        reinforcement(commands);
 
         List<Zone> zonesWithDrones = new ArrayList<>();
         for (Continent c : disputed)
