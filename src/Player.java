@@ -122,19 +122,23 @@ class World {
 
     private void createContinent(Map<Integer, Zone> zones) {
         for (Zone z : zones.values()) {
-            Continent continent = getRattachedContinent(z);
-            if (continent ==  null) {
-                continent = getPossibleContinent(z);
-                if (continent == null) {
-                    continent = new Continent();
-                    continents.add(continent);
-                }
-                continent.addZone(z);
+            Continent continent = getContinentOfAdjacent(z);
+            if (continent == null) {
+                continent = new Continent();
+                continents.add(continent);
             }
+            continent.addZone(z);
         }
     }
 
-    private Continent getPossibleContinent(Zone zone) {
+    private Continent getRattachedContinent(Zone zone) {
+        for (Continent c : continents)
+            if (c.zones.containsValue(zone))
+                return c;
+        return null;
+    }
+
+    private Continent getContinentOfAdjacent(Zone zone) {
         for (Zone z : zone.getAllAdjacentZones()) {
             Continent c = getRattachedContinent(z);
             if (c != null)
@@ -162,13 +166,6 @@ class World {
             in.nextLine();
         }
         return zones;
-    }
-
-    private Continent getRattachedContinent(Zone zone) {
-        for (Continent c : continents)
-            if (c.zones.containsValue(zone))
-                return c;
-        return null;
     }
 
     private void addContinentToList(Continent continent) {
