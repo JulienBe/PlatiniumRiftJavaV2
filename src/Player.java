@@ -329,12 +329,11 @@ class World {
             public int compare(Drone o1, Drone o2) {
                 int diff = o1.adjacentDestinations.size() - o2.adjacentDestinations.size();
                 if (diff == 0) {
-                    return o1.currentPosition.id - o2.currentPosition.id;
+                    return Player.R.nextInt(10);
                 }
                 return o1.adjacentDestinations.size() - o2.adjacentDestinations.size();
             }
         });
-        System.err.println("TOTAL DRONES : " + drones.size());
 
         List<Zone> alreadyTaken = new ArrayList<>();
 
@@ -850,8 +849,8 @@ class Zone implements Comparable<Zone> {
         return dronesList;
     }
 
-    private TreeSet<AdjacentMvt> getDronePossibleAdjacentDestinations() {
-        TreeSet<AdjacentMvt> possibilities = new TreeSet<>();
+    private List<AdjacentMvt> getDronePossibleAdjacentDestinations() {
+        List<AdjacentMvt> possibilities = new ArrayList<>();
 
         if (platinium > 0 && Utils.hasEnemiesNearby(this) && drones[Player.myId] < Utils.getNbEnemyDronesNearby(this) + 2)
             possibilities.add(new AdjacentMvt(this, 10));
@@ -859,10 +858,13 @@ class Zone implements Comparable<Zone> {
         if (Utils.getOtherPlayerActive(adjacentDrones) > 1)
             return possibilities;
 
-        for (Zone z : adjacentWithRessources) {
+        List<Zone> zones = adjacentZones;
+        if (Player.playerCount < 4)
+            zones = adjacentWithRessources;
+        for (Zone z : zones) {
             if (z.futurDrones != 0 || Utils.isMine(z) || (Utils.hasEnemies(z)))
                 continue;
-            possibilities.add(new AdjacentMvt(z, z.platinium));
+            possibilities.add(new AdjacentMvt(z, (1 + z.platinium) / z.adjacentZones.size()));
         }
         return possibilities;
     }
