@@ -109,26 +109,18 @@ class World {
     private final List<Continent> continents = new ArrayList<>(), disputed = new ArrayList<>();
 
     void init(Scanner in, int zoneCount, int linkCount) {
-        Map<Integer, Zone> zones = new HashMap<>();
-        this.zoneCount = zoneCount;
-        for (int i = 0; i < zoneCount; i++) {
-            int zoneId = in.nextInt();
-            int platinumSource = in.nextInt();
-            Zone zone = new Zone(platinumSource, zoneId);
-            zones.put(zoneId, zone);
-            in.nextLine();
-        }
+        Map<Integer, Zone> zones = zoneInit(in, zoneCount);
 
-        for (int i = 0; i < linkCount; i++) {
-            int zone1 = in.nextInt();
-            int zone2 = in.nextInt();
-            Zone z1 = zones.get(zone1);
-            Zone z2 = zones.get(zone2);
-            z1.addAdjacentZone(z2);
-            z2.addAdjacentZone(z1);
-            in.nextLine();
-        }
+        linkInit(in, linkCount, zones);
 
+        createContinent(zones);
+
+        for (Continent c : continents)
+            c.initFinished();
+        disputed.addAll(continents);
+    }
+
+    private void createContinent(Map<Integer, Zone> zones) {
         for (Zone z : zones.values()) {
             Continent continent = getRattachedContinent(z);
             if (continent ==  null) {
@@ -140,9 +132,6 @@ class World {
                 continent.addZone(z);
             }
         }
-        for (Continent c : continents)
-            c.initFinished();
-        disputed.addAll(continents);
     }
 
     private Continent getPossibleContinent(Zone zone) {
@@ -152,6 +141,27 @@ class World {
                 return c;
         }
         return null;
+    }
+
+    private void linkInit(Scanner in, int linkCount, Map<Integer, Zone> zones) {
+        for (int i = 0; i < linkCount; i++) {
+            Zone z1 = zones.get(in.nextInt());
+            Zone z2 = zones.get(in.nextInt());
+            z1.addAdjacentZone(z2);
+            z2.addAdjacentZone(z1);
+            in.nextLine();
+        }
+    }
+
+    private Map<Integer, Zone> zoneInit(Scanner in, int zoneCount) {
+        Map<Integer, Zone> zones = new HashMap<>();
+        this.zoneCount = zoneCount;
+        for (int i = 0; i < zoneCount; i++) {
+            int id = in.nextInt();
+            zones.put(id, new Zone(id, in.nextInt()));
+            in.nextLine();
+        }
+        return zones;
     }
 
     private Continent getRattachedContinent(Zone zone) {
@@ -207,7 +217,7 @@ class World {
         /**
          * REINFORCEMENT
          */
-//        reinforcement(commands);
+        reinforcement(commands);
 
         List<Zone> zonesWithDrones = new ArrayList<>();
         for (Continent c : disputed)
@@ -215,7 +225,7 @@ class World {
         /**
          * ADJACENT
          */
-        mvtAdjacent(commands, zonesWithDrones);
+        mvtAdjacentOpti(commands, zonesWithDrones);
         /**
          * DISTANT
          */
@@ -310,6 +320,39 @@ class World {
         }
     }
 
+    private void mvtAdjacentOpti(List<CommandMvt> commands, List<Zone> zonesWithDrones) {
+        Iterator<Zone> it = zonesWithDrones.iterator();
+
+        List<Drone> drones = new ArrayList<>();
+        while (it.hasNext())
+            drones.addAll(it.next().getDronesWithAdjacentMvt());
+
+        Collections.sort(drones, new Comparator<Drone>() {
+            @Override
+            public int compare(Drone o1, Drone o2) {
+                int diff = o1.adjacentDestinations.size() - o2.adjacentDestinations.size();
+                if (diff == 0) {
+                    return o1.currentPosition.id - o2.currentPosition.id;
+                }
+                return o1.adjacentDestinations.size() - o2.adjacentDestinations.size();
+            }
+        });
+        System.err.println("TOTAL DRONES : " + drones.size());
+
+        List<Zone> alreadyTaken = new ArrayList<>();
+
+        for (Drone drone : drones) {
+            for (AdjacentMvt destination : drone.getDestinations()) {
+                if (alreadyTaken.contains(destination.destination))
+                    continue;
+                alreadyTaken.add(destination.destination);
+                sendDrone(commands, drone.currentPosition, destination.destination);
+                System.err.println("Adjacent : " + drone.currentPosition.id + " -> " + destination.destination.id);
+                break;
+            }
+        }
+    }
+
     private void sendDrone(List<CommandMvt> commands, Zone origin, Zone zoneToGo) {
         CommandMvt commandMvt = new CommandMvt();
         commandMvt.from = origin.id;
@@ -369,7 +412,7 @@ class World {
         return platinium;
     }
 
-    private int spawnDrone(int platinum, List<CommandSpawn> commands, TreeSet<ContinentSpawnAnalytic> spawnAnalytics) {
+    private int spawnDrone(int platinum, List<CommandSpawn> commands, TreeSet<ContinentSpawnAnalytic> spawnAnalytics)    {
 
         ContinentSpawnAnalytic spawnAnalytic = spawnAnalytics.pollFirst();
         SpawnResolver candidate = spawnAnalytic.pollBest();
@@ -519,7 +562,7 @@ class Zone implements Comparable<Zone> {
     boolean justBeenTaken = false;
     public Continent continent;
 
-    Zone(int platinium, int id) {
+    Zone(int id, int platinium) {
         this.platinium = platinium;
         this.id = id;
     }
@@ -711,7 +754,7 @@ class Zone implements Comparable<Zone> {
 
         for (Zone z : adjacentWithRessources) {
             if (!Utils.hasEnemies(z) && !Utils.isMine(z)) {
-                value += (z.platinium * 2) / (1 + z.futurDrones);
+                value += (z.platinium * 4) / (1 + z.futurDrones);
                 if (!Utils.hasEnemiesNearby(z))
                     value += (z.platinium * 2) / (1 + z.futurDrones);
             }
@@ -799,6 +842,33 @@ class Zone implements Comparable<Zone> {
         if (drones[Player.myId] <= 0)
             continent.zoneWithDrones.remove(this);
     }
+
+    public List<Drone> getDronesWithAdjacentMvt() {
+        List<Drone> dronesList = new ArrayList<>();
+        for (int i = 0; i < drones[Player.myId]; i++) {
+            Drone drone = new Drone(this);
+            drone.adjacentDestinations.addAll(getDronePossibleAdjacentDestinations());
+            dronesList.add(drone);
+        }
+        return dronesList;
+    }
+
+    private TreeSet<AdjacentMvt> getDronePossibleAdjacentDestinations() {
+        TreeSet<AdjacentMvt> possibilities = new TreeSet<>();
+
+        if (platinium > 0 && Utils.hasEnemiesNearby(this) && drones[Player.myId] < Utils.getNbEnemyDronesNearby(this) + 2)
+            possibilities.add(new AdjacentMvt(this, 10));
+
+        if (Utils.getOtherPlayerActive(adjacentDrones) > 1)
+            return possibilities;
+
+        for (Zone z : adjacentWithRessources) {
+            if (z.futurDrones != 0 || Utils.isMine(z) || (Utils.hasEnemies(z)))
+                continue;
+            possibilities.add(new AdjacentMvt(z, z.platinium));
+        }
+        return possibilities;
+    }
 }
 
 /***
@@ -829,11 +899,6 @@ class CommandSpawn {
  *     ╚═════╝    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-
-class Proposition {
-    Zone origin;
-    List<Zone> destinations = new ArrayList<>();
-}
 
 class MagnetismResolver implements Comparable<MagnetismResolver>{
     float magnetism;
@@ -911,6 +976,37 @@ class PullResolver implements Comparable<PullResolver> {
     @Override
     public int compareTo(PullResolver pullResolver) {
         return (int) ((pullResolver.willingless * 1000) - (willingless * 1000));
+    }
+}
+
+class Drone {
+    Zone currentPosition, futurePosition;
+    List<AdjacentMvt> adjacentDestinations = new ArrayList<>();
+
+    public Drone(Zone currentPosition) {
+        this.currentPosition = currentPosition;
+    }
+
+    public List<AdjacentMvt> getDestinations() {
+        Collections.sort(adjacentDestinations);
+        return adjacentDestinations;
+    }
+}
+
+class AdjacentMvt implements Comparable<AdjacentMvt> {
+    Zone destination;
+    float fitness;
+
+    public AdjacentMvt(Zone destination, float fitness) {
+        this.destination = destination;
+        this.fitness = fitness;
+    }
+
+    @Override
+    public int compareTo(AdjacentMvt o) {
+        if (o.fitness == fitness)
+            return destination.id - o.destination.id;
+        return (int) ((o.fitness * 1000) - (fitness * 1000));
     }
 }
 
