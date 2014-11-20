@@ -232,7 +232,7 @@ class World {
         /**
          * REINFORCEMENT
          */
-        reinforcement(commands);
+//        reinforcement(commands);
 
         List<Zone> zonesWithDrones = new ArrayList<>();
         for (Continent c : disputed)
@@ -247,7 +247,6 @@ class World {
         distantMvt(commands, zonesWithDrones);
         Utils.executeCommands(commands);
     }
-
 
     private void reinforcement(List<CommandMvt> commands) {
         for (Continent c : disputed) {
@@ -278,14 +277,16 @@ class World {
      */
     private void reinforceZone(List<CommandMvt> commands, Zone destination, int needed) {
         while (needed > 0) {
-            TreeSet<PullResolver> candidates = new TreeSet<>();
+            List<PullResolver> candidates = new ArrayList<>();
             for (Zone z : destination.adjacentZones) {
                 PullResolver pullResolver = z.getWillingless(destination);
                 if (pullResolver != null && pullResolver.willingless > 0)
                     candidates.add(pullResolver);
             }
+
             if (candidates.size() > 0) {
-                Zone origin = candidates.first().zone;
+                Collections.sort(candidates);
+                Zone origin = candidates.get(0).zone;
                 System.err.println("Mvt defense : " + origin.id + " to : " + destination.id);
                 sendDrone(commands, origin, destination);
                 needed--;
@@ -295,9 +296,7 @@ class World {
     }
 
     private void distantMvt(List<CommandMvt> commands, List<Zone> zonesWithDrones) {
-        Iterator<Zone> it = zonesWithDrones.iterator();
-        while (it.hasNext()) {
-            Zone origin = it.next();
+        for (Zone origin : zonesWithDrones) {
             int i = origin.podsToKeep();
             int dronesToSend = origin.getDrones();
             for (; i < dronesToSend; i++) {
@@ -311,11 +310,9 @@ class World {
     }
 
     private void adjacentMvt(List<CommandMvt> commands, List<Zone> zonesWithDrones) {
-        Iterator<Zone> it = zonesWithDrones.iterator();
-
         List<Drone> drones = new ArrayList<>();
-        while (it.hasNext())
-            drones.addAll(it.next().getDronesWithAdjacentMvt());
+        for (Zone z : zonesWithDrones)
+            drones.addAll(z.getDronesWithAdjacentMvt());
 
         Collections.sort(drones, new Comparator<Drone>() {
             @Override
@@ -907,7 +904,6 @@ class SpawnResolver implements Comparable<SpawnResolver> {
 }
 
 class PullResolver implements Comparable<PullResolver> {
-    int dronesToSpare;
     float willingless;
     final Zone zone;
 
