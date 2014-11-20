@@ -23,9 +23,7 @@ class Player {
         final World world = init(in);
 
         while (true) {
-            int platinum = in.nextInt(); // my available Platinum
-//            if (firstTurn && playerCount > 2)
-//                platinum *= 0.5f;
+            int platinum = in.nextInt();
             in.nextLine();
             long begin = System.currentTimeMillis();
             /***
@@ -108,6 +106,16 @@ class World {
     private int zoneCount;
     private final List<Continent> continents = new ArrayList<>(), disputed = new ArrayList<>();
 
+    /***
+     *     _____         _  _
+     *    |_   _|       (_)| |
+     *      | |   _ __   _ | |_
+     *      | |  | '_ \ | || __|
+     *     _| |_ | | | || || |_
+     *     \___/ |_| |_||_| \__|
+     *
+     *
+     */
     void init(Scanner in, int zoneCount, int linkCount) {
         Map<Integer, Zone> zones = zoneInit(in, zoneCount);
 
@@ -173,9 +181,19 @@ class World {
         else                                                disputed.remove(continent);
     }
 
+    /***
+     *     _   _             _         _
+     *    | | | |           | |       | |
+     *    | | | | _ __    __| |  __ _ | |_   ___
+     *    | | | || '_ \  / _` | / _` || __| / _ \
+     *    | |_| || |_) || (_| || (_| || |_ |  __/
+     *     \___/ | .__/  \__,_| \__,_| \__| \___|
+     *           | |
+     *           |_|
+     */
     void update(Scanner in) {
         for (Continent c : continents)
-            c.newTurn();
+            c.update();
         for (int i = 0; i < zoneCount; i++)
             updateZone(in);
 
@@ -222,34 +240,33 @@ class World {
         /**
          * ADJACENT
          */
-        mvtAdjacentOpti(commands, zonesWithDrones);
+        adjacentMvt(commands, zonesWithDrones);
         /**
          * DISTANT
          */
-        mvtDistant(commands, zonesWithDrones);
+        distantMvt(commands, zonesWithDrones);
         Utils.executeCommands(commands);
     }
 
 
     private void reinforcement(List<CommandMvt> commands) {
         for (Continent c : disputed) {
-            TreeSet<Zone> zoneToReinforce = new TreeSet<>();
+            List<Zone> zoneToReinforce = new ArrayList<>();
             for (Zone z : c.zoneWithRessources) {
                 if (!Utils.isMine(z))
                     continue;
                 zoneToReinforce.add(z);
             }
+            Collections.sort(zoneToReinforce, Zone.comparatorPlatinium);
             mvtDefense(commands, zoneToReinforce);
         }
     }
 
-    private void mvtDefense(List<CommandMvt> commands, TreeSet<Zone> zoneToReinforce) {
-        Iterator<Zone> it = zoneToReinforce.iterator();
-        while (it.hasNext()) {
-            Zone destination = it.next();
-            if (!Utils.isMine(destination))
+    private void mvtDefense(List<CommandMvt> commands, List<Zone> zoneToReinforce) {
+        for (Zone z : zoneToReinforce) {;
+            if (!Utils.isMine(z))
                 continue;
-            reinforceZone(commands, destination, destination.additionnalDronesNeeded());
+            reinforceZone(commands, z, z.additionnalDronesNeeded());
         }
     }
 
@@ -277,7 +294,7 @@ class World {
         }
     }
 
-    private void mvtDistant(List<CommandMvt> commands, List<Zone> zonesWithDrones) {
+    private void distantMvt(List<CommandMvt> commands, List<Zone> zonesWithDrones) {
         Iterator<Zone> it = zonesWithDrones.iterator();
         while (it.hasNext()) {
             Zone origin = it.next();
@@ -293,7 +310,7 @@ class World {
         }
     }
 
-    private void mvtAdjacentOpti(List<CommandMvt> commands, List<Zone> zonesWithDrones) {
+    private void adjacentMvt(List<CommandMvt> commands, List<Zone> zonesWithDrones) {
         Iterator<Zone> it = zonesWithDrones.iterator();
 
         List<Drone> drones = new ArrayList<>();
@@ -420,7 +437,7 @@ class Continent {
             z.initFinished();
     }
 
-    public void newTurn() {
+    public void update() {
         for (int i = 0; i < drones.length; i++)
             drones[i] += 0;
         futurDrones = 0;
@@ -491,7 +508,7 @@ class Continent {
  *
  */
 
-class Zone implements Comparable<Zone> {
+class Zone {
 
     // SPAWN
     private static final float
@@ -500,7 +517,7 @@ class Zone implements Comparable<Zone> {
     ADJACENT_ZONE_SIZE_DIV = 2;
     // MVT
     private static final int MAX_DISTANCE = 7, MAX_DRONES = 5;
-
+    static final Comparator<Zone> comparatorPlatinium = new Comparator<Zone>() {        public int compare(Zone o1, Zone o2) {            return o2.platinium - o1.platinium;        }    };
 
     ZoneStatus status = ZoneStatus.NEUTRAL;
     // /!\
@@ -683,7 +700,7 @@ class Zone implements Comparable<Zone> {
         if (!Utils.hasEnemies(this))
             i += 5 + platinium * 5;
         else
-            i += platinium;
+            i += platinium * 2;
         i /= (futurDrones / 2f) + 1;
         i /= (targetted / 4f) + 1;
         //i /= futurDrones + 1;
@@ -782,11 +799,6 @@ class Zone implements Comparable<Zone> {
             return pullResolver;
         }
         return null;
-    }
-
-    @Override
-    public int compareTo(Zone zone) {
-        return zone.platinium - platinium;
     }
 
     public void updateFuturDrones(int i) {
