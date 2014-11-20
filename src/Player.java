@@ -328,10 +328,7 @@ class World {
             @Override
             public int compare(Drone o1, Drone o2) {
                 int diff = o1.adjacentDestinations.size() - o2.adjacentDestinations.size();
-                if (diff == 0) {
-                    return Player.R.nextInt(10);
-                }
-                return o1.adjacentDestinations.size() - o2.adjacentDestinations.size();
+                return diff;
             }
         });
 
@@ -866,7 +863,12 @@ class Zone implements Comparable<Zone> {
                 continue;
             possibilities.add(new AdjacentMvt(z, (1 + z.platinium) / z.adjacentZones.size()));
         }
-        Collections.sort(possibilities);
+        Collections.sort(possibilities, new Comparator<AdjacentMvt>() {
+            @Override
+            public int compare(AdjacentMvt o1, AdjacentMvt o2) {
+                return (int) ((o2.fitness * 1000) - (o1.fitness * 1000));
+            }
+        });
         return possibilities;
     }
 }
