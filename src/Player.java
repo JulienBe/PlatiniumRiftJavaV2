@@ -616,14 +616,14 @@ class Zone implements Comparable<Zone> {
         if (Player.playerCount < 4)
             zones = adjacentWithRessources;
         for (Zone z : zones) {
-            if (z.futurDrones != 0 || Utils.isMine(z) || (Utils.hasEnemies(z)))
+            if (z.futurDrones != 0 || Utils.isMine(z) || ((Utils.hasEnemies(z) && Player.playerCount > 2)))
                 continue;
             possibilities.add(new AdjacentMvt(z, (1 + z.platinium) / z.adjacentZones.size()));
         }
         Collections.sort(possibilities, new Comparator<AdjacentMvt>() {
             @Override
             public int compare(AdjacentMvt o1, AdjacentMvt o2) {
-                return (int) ((o2.fitness * 1000) - (o1.fitness * 1000));
+            return (int) ((o2.fitness * 1000) - (o1.fitness * 1000));
             }
         });
         return possibilities;
@@ -658,7 +658,7 @@ class Zone implements Comparable<Zone> {
         int[] newIds = new int[ids.length + 1];
         System.arraycopy(ids, 0, newIds, 0, ids.length);
         newIds[newIds.length - 1] = id;
-        //if (magnetism > 0)
+        if (magnetism > 0)
             candidates.add(new MagnetismResolver(magnetism / newIds.length * 2, adjacent, this));
         if (newIds.length >= MAX_DISTANCE)
             return;
@@ -670,14 +670,14 @@ class Zone implements Comparable<Zone> {
     private float getMagnetism() {
         if (Utils.getOtherPlayerActive(adjacentDrones) > 1 && drones[Player.myId] < 5)
             return -1;
-        float i = 1;
+        float i = 0;
         if (Utils.isMine(this)) {
             if (Utils.isBorder(this))
                 i++;
             return i;
         }
         if (!Utils.isMine(this))
-            i += 10;
+            i += 5;
         if (!Utils.hasEnemies(this))
             i += 5 + platinium * 5;
         else
@@ -734,8 +734,6 @@ class Zone implements Comparable<Zone> {
             value *= 2;
         if (continent.zones.size() < 50 && Player.playerCount > 2)
             value *= 2;
-//        if (Player.playerCount > 2 && Utils.isFree(this))
-//            value *= 0.75f;
         return value;
     }
 
