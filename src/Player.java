@@ -659,7 +659,7 @@ class Zone implements Comparable<Zone> {
         System.arraycopy(ids, 0, newIds, 0, ids.length);
         newIds[newIds.length - 1] = id;
         if (magnetism > 0)
-            candidates.add(new MagnetismResolver(magnetism / newIds.length * 2, adjacent, this));
+            candidates.add(new MagnetismResolver(magnetism / newIds.length, adjacent, this));
         if (newIds.length >= MAX_DISTANCE)
             return;
 
@@ -676,12 +676,14 @@ class Zone implements Comparable<Zone> {
                 i++;
             return i;
         }
+        if (Utils.isFree(this))
+            i++;
         if (!Utils.isMine(this))
             i += 5;
         if (!Utils.hasEnemies(this))
-            i += 5 + platinium * 5;
+            i += platinium * 5;
         else
-            i += platinium;
+            i += platinium * 2.5f;
         i /= (futurDrones / 2f) + 1;
         i /= (targetted / 4f) + 1;
         //i /= futurDrones + 1;
