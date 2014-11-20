@@ -683,7 +683,7 @@ class Zone implements Comparable<Zone> {
         if (!Utils.hasEnemies(this))
             i += 5 + platinium * 5;
         else
-            i += platinium * 2.5f;
+            i += platinium;
         i /= (futurDrones / 2f) + 1;
         i /= (targetted / 4f) + 1;
         //i /= futurDrones + 1;
