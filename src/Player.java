@@ -657,6 +657,7 @@ class Zone {
                     value += z.platinium;
             }
         }
+        value /= 1 + (futurDrones + drones[Player.myId]);
         return value;
     }
 
