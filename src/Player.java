@@ -659,7 +659,7 @@ class Zone {
             if (!Utils.isMine(z) && !Utils.hasEnemies(z))
                 value += (z.platinium) / (1 + z.futurDrones);
 
-        value *= (7 - adjacentZones.size()) / 3;
+        value *= (7 - adjacentZones.size()) / 2;
 
         if (Utils.isMine(this) && Utils.hasEnemiesNearby(this))
             value *= platinium + 1;
