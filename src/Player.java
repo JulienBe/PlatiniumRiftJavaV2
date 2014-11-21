@@ -550,7 +550,6 @@ class Zone {
 
     private List<AdjacentMvt> getDronePossibleAdjacentDestinations() {
         List<AdjacentMvt> possibilities = new ArrayList<>();
-
         if (platinium > 0 && Utils.hasEnemiesNearby(this) && drones[Player.myId] < Utils.getNbEnemyDronesNearby(this) + 2)
             possibilities.add(new AdjacentMvt(this, 10));
 
@@ -660,27 +659,59 @@ class Zone {
     public float evaluateFreeZone(int otherPlayerActive) {
         if (Utils.allAdjacentAreMine(this))
             return -1;
-        float value = 1 + (platinium * 4);
+        float value = platinium * 4 / (1 + futurDrones);
+
         for (Zone z : adjacentWithRessources) {
-            if (!Utils.isMine(z)) {
-                value += z.platinium;
-                if (!Utils.hasEnemies(z))
-                    value += z.platinium;
-            }
+                value += (z.platinium) / (1 + z.futurDrones);
+                if (!Utils.hasEnemiesNearby(z))
+                    value += (z.platinium) / (1 + z.futurDrones);
         }
+
+        for (Zone z : adjacentOfAdjacentWithRessources)
+            if (!Utils.isMine(z) && !Utils.hasEnemies(z))
+                value += (z.platinium) / (1 + z.futurDrones);
+
+        value *= (7 - adjacentZones.size());
+
+        if (Utils.isMine(this) && Utils.hasEnemiesNearby(this))
+            value *= platinium + 1;
+        else
+            value /= Utils.getNbEnemieZonesNearby(this) + 1;
+        value /= futurDrones * 2 + 1;
+        if (continent.drones[Player.myId] == 0)
+            value *= 2;
+        if (continent.zones.size() < 50 && Player.playerCount > 2)
+            value *= 2;
         int dronesNearby = drones[Player.myId] + futurDrones + adjacentDrones[Player.myId];
         for (Zone z : adjacentZones)
             dronesNearby += z.futurDrones;
-//        if (Player.playerCount > 2 && Utils.hasEnemiesNearby(this))
-//            value /= 2;
-        // Player count : the more player, the more small continents will be important
-        float percentage = (float) (-continent.futurDrones + Player.playerCount + continent.controlledZones.size()) / (float)( continent.zones.size() + continent.futurDrones);
-//        if (continent.drones[Player.myId] == 0)
-//            value *= 2;
-        value *= 1 + percentage;
         value /= 1 + dronesNearby;
-        value /= 1 + (adjacentZones.size());
         return value;
+
+//        if (Utils.allAdjacentAreMine(this))
+//        return -1;
+//        float value = 1 + (platinium * 4);
+//        for (Zone z : adjacentWithRessources) {
+//            if (!Utils.isMine(z)) {
+//                value += z.platinium;
+//                if (!Utils.hasEnemies(z))
+//                    value += z.platinium;
+//            }
+//        }
+//        int dronesNearby = drones[Player.myId] + futurDrones + adjacentDrones[Player.myId];
+//        for (Zone z : adjacentZones)
+//            dronesNearby += z.futurDrones;
+////        if (Player.playerCount > 2 && Utils.hasEnemiesNearby(this))
+////            value /= 2;
+//        // Player count : the more player, the more small continents will be important
+//        float percentage = (float) (-continent.futurDrones + Player.playerCount + continent.controlledZones.size()) / (float)( continent.zones.size() + continent.futurDrones);
+////        if (continent.drones[Player.myId] == 0)
+////            value *= 2;
+//        value *= 1 + percentage;
+//        value /= 1 + dronesNearby;
+//        value /= 1 + (adjacentZones.size());
+//
+//        return value;
     }
 
     public int podsToKeep() {
