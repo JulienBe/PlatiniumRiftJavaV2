@@ -267,13 +267,13 @@ class World {
             }
         });
 
-        List<Zone> alreadyTaken = new ArrayList<>();
+//        List<Zone> alreadyTaken = new ArrayList<>();
 
         for (Drone drone : drones) {
             for (AdjacentMvt destination : drone.getDestinations()) {
-                if (alreadyTaken.contains(destination.destination))
-                    continue;
-                alreadyTaken.add(destination.destination);
+//                if (alreadyTaken.contains(destination.destination))
+//                    continue;
+//                alreadyTaken.add(destination.destination);
                 sendDrone(commands, drone.currentPosition, destination.destination);
                 System.err.println("Adjacent : " + drone.currentPosition.id + " -> " + destination.destination.id);
                 break;
@@ -337,7 +337,6 @@ class World {
  *    ██║     ██║   ██║██║╚██╗██║   ██║   ██║██║╚██╗██║██╔══╝  ██║╚██╗██║   ██║   ╚════██║
  *    ╚██████╗╚██████╔╝██║ ╚████║   ██║   ██║██║ ╚████║███████╗██║ ╚████║   ██║   ███████║
  *     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝
- *
  */
 
 class Continent {
@@ -430,7 +429,6 @@ class Continent {
  *     ███╔╝  ██║   ██║██║╚██╗██║██╔══╝
  *    ███████╗╚██████╔╝██║ ╚████║███████╗
  *    ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
- *
  */
 
 class Zone {
@@ -539,6 +537,14 @@ class Zone {
             drone.adjacentDestinations.addAll(getDronePossibleAdjacentDestinations());
             dronesList.add(drone);
         }
+        if (id == 149) {
+            for (Drone drone : dronesList) {
+                System.err.println("    new drone");
+                for (AdjacentMvt adjacentMvt : drone.getDestinations()) {
+                    System.err.println("        " + adjacentMvt.destination.id + " : " + adjacentMvt.fitness);
+                }
+            }
+        }
         return dronesList;
     }
 
@@ -554,10 +560,13 @@ class Zone {
 //        if (Player.playerCount < 4)
 //            zones = adjacentWithRessources;
         for (Zone z : adjacentZones) {
-            if (z.futurDrones != 0 || Utils.isMine(z) || ((Utils.hasEnemies(z) && Player.playerCount > 2)))
+            if (z.futurDrones > Utils.getEnemieDrones(z.drones) || Utils.isMine(z) || ((Utils.hasEnemies(z) && Player.playerCount > 2 && drones[Player.myId] < 4)))
                 continue;
+
             AdjacentMvt adjacentMvt = new AdjacentMvt(z, 0);
             adjacentMvt.fitness += z.platinium * 3;
+            if (!Utils.isMine(z))
+                adjacentMvt.fitness++;
             for (Zone z2 : z.adjacentWithRessources) {
                 if (!Utils.isMine(z2))
                     adjacentMvt.fitness += z2.platinium;
