@@ -647,6 +647,8 @@ class Zone {
      **/
 
     public float evaluateFreeZone(int otherPlayerActive) {
+        if (Utils.allAdjacentAreMine(this))
+            return -1;
         float value = platinium * 4 / (1 + futurDrones);
 
         for (Zone z : adjacentWithRessources) {
@@ -659,7 +661,7 @@ class Zone {
             if (!Utils.isMine(z) && !Utils.hasEnemies(z))
                 value += (z.platinium) / (1 + z.futurDrones);
 
-        value *= (7 - adjacentZones.size()) / 2;
+        value *= (7 - adjacentZones.size());
 
         if (Utils.isMine(this) && Utils.hasEnemiesNearby(this))
             value *= platinium + 1;
