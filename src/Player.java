@@ -84,9 +84,7 @@ class Player {
         int zoneCount = in.nextInt(); // the amount of zones on the map
         int linkCount = in.nextInt(); // the amount of links between all
         in.nextLine();
-        World world = new World();
-        world.init(in, zoneCount, linkCount);
-        return world;
+        return new World(in, zoneCount, linkCount);
     }
 
 }
@@ -101,9 +99,7 @@ class Player {
  */
 class World {
 
-    // 0.85 : 52/772 -- 40.19
-    private static final float SPAWN_ATTRACTION_DIMINISHING = 0.55f;
-    private int zoneCount;
+    private final int zoneCount;
     private final List<Continent> continents = new ArrayList<>(), disputed = new ArrayList<>();
 
     /***
@@ -116,7 +112,8 @@ class World {
      *
      *
      */
-    void init(Scanner in, int zoneCount, int linkCount) {
+    World(Scanner in, int zoneCount, int linkCount) {
+        this.zoneCount = zoneCount;
         Map<Integer, Zone> zones = zoneInit(in, zoneCount);
 
         linkInit(in, linkCount, zones);
@@ -139,7 +136,7 @@ class World {
         }
     }
 
-    private Continent getRattachedContinent(Zone zone) {
+    private Continent getAttachedContinent(Zone zone) {
         for (Continent c : continents)
             if (c.zones.containsValue(zone))
                 return c;
@@ -148,7 +145,7 @@ class World {
 
     private Continent getContinentOfAdjacent(Zone zone) {
         for (Zone z : zone.getAllAdjacentZones()) {
-            Continent c = getRattachedContinent(z);
+            Continent c = getAttachedContinent(z);
             if (c != null)
                 return c;
         }
@@ -167,7 +164,6 @@ class World {
 
     private Map<Integer, Zone> zoneInit(Scanner in, int zoneCount) {
         Map<Integer, Zone> zones = new HashMap<>();
-        this.zoneCount = zoneCount;
         for (int i = 0; i < zoneCount; i++) {
             int id = in.nextInt();
             zones.put(id, new Zone(id, in.nextInt()));
@@ -229,11 +225,6 @@ class World {
      */
     void movements() {
         List<CommandMvt> commands = new ArrayList<>();
-        /**
-         * REINFORCEMENT
-         */
-        if (Player.playerCount > 2)
-            reinforcement(commands);
 
         List<Zone> zonesWithDrones = new ArrayList<>();
         for (Continent c : disputed)
@@ -247,53 +238,6 @@ class World {
          */
         distantMvt(commands, zonesWithDrones);
         Utils.executeCommands(commands);
-    }
-
-    private void reinforcement(List<CommandMvt> commands) {
-        for (Continent c : disputed) {
-            List<Zone> zoneToReinforce = new ArrayList<>();
-            for (Zone z : c.zoneWithRessources) {
-                if (!Utils.isMine(z))
-                    continue;
-                zoneToReinforce.add(z);
-            }
-            Collections.sort(zoneToReinforce, Zone.comparatorPlatinium);
-            mvtDefense(commands, zoneToReinforce);
-        }
-    }
-
-    private void mvtDefense(List<CommandMvt> commands, List<Zone> zoneToReinforce) {
-        for (Zone z : zoneToReinforce) {;
-            if (!Utils.isMine(z))
-                continue;
-            reinforceZone(commands, z, z.additionnalDronesNeeded());
-        }
-    }
-
-    /**
-     * Pull from all adjacent until there is nothing to pull or until the need has been filled
-     * @param commands
-     * @param destination
-     * @param needed
-     */
-    private void reinforceZone(List<CommandMvt> commands, Zone destination, int needed) {
-        while (needed > 0) {
-            List<PullResolver> candidates = new ArrayList<>();
-            for (Zone z : destination.adjacentZones) {
-                PullResolver pullResolver = z.getWillingless(destination);
-                if (pullResolver != null && pullResolver.willingless > 0)
-                    candidates.add(pullResolver);
-            }
-
-            if (candidates.size() > 0) {
-                Collections.sort(candidates);
-                Zone origin = candidates.get(0).zone;
-                System.err.println("Mvt defense : " + origin.id + " to : " + destination.id);
-                sendDrone(commands, origin, destination);
-                needed--;
-            } else
-                break;
-        }
     }
 
     private void distantMvt(List<CommandMvt> commands, List<Zone> zonesWithDrones) {
@@ -703,26 +647,20 @@ class Zone {
      **/
 
     public float evaluateFreeZone(int otherPlayerActive) {
-//        if (Utils.allAdjacentAreMine(this) && Player.playerCount == 2)
-//            return -1;
-        float value = 0;
+        float value = platinium * 4 / (1 + futurDrones);
 
         for (Zone z : adjacentWithRessources) {
-            if (!Utils.hasEnemies(z) && !Utils.isMine(z)) {
-                value += (z.platinium * 4) / (1 + z.futurDrones);
+                value += (z.platinium) / (1 + z.futurDrones);
                 if (!Utils.hasEnemiesNearby(z))
-                    value += (z.platinium * 2) / (1 + z.futurDrones);
-            }
+                    value += (z.platinium) / (1 + z.futurDrones);
         }
 
         for (Zone z : adjacentOfAdjacentWithRessources)
             if (!Utils.isMine(z) && !Utils.hasEnemies(z))
                 value += (z.platinium) / (1 + z.futurDrones);
 
-        if (futurDrones == 0 && Utils.isFree(this))
-            value += platinium * MULTI_PT_IF_FREE_N_NO_FUTURE_DRONE;
+        value *= (7 - adjacentZones.size()) / 3;
 
-        value *= 7 - adjacentZones.size();
         if (Utils.isMine(this) && Utils.hasEnemiesNearby(this))
             value *= platinium + 1;
         else
@@ -735,7 +673,7 @@ class Zone {
         int dronesNearby = drones[Player.myId] + futurDrones + adjacentDrones[Player.myId];
         for (Zone z : adjacentZones)
             dronesNearby += z.futurDrones;
-        value /= 1 + dronesNearby * 20;
+        value /= 1 + dronesNearby;
         return value;
     }
 
@@ -752,37 +690,6 @@ class Zone {
         return getDrones() - spare;
     }
 
-    public int additionnalDronesNeeded() {
-        if (platinium == 0)
-            return 0;
-        int needed = (int) (Utils.getNbEnemieZonesNearby(this) * 1.5f);
-        return needed - drones[Player.myId];
-    }
-
-    /**
-     * I can go if :
-     *  I have no enemy zone nearby
-     *  I have no platinium
-     *  I have platinium but no enemies nearby
-     *  I have platinium, enemies nearby, but enough drones to handle them
-     *  I have platinium, enemies nearby, not enough drones to handle them but adjacent one has more platinium
-     * @param destination
-     * @return
-     */
-    public PullResolver getWillingless(Zone destination) {
-        if (drones[Player.myId] == 0)
-            return null;
-        float willingless = destination.platinium - platinium;
-        willingless += Utils.getNbEnemieZonesNearby(this) - (drones[Player.myId] + futurDrones);
-        if (Utils.getNbEnemieZonesNearby(this) == 0)
-            willingless += 10;
-        if (willingless > 0) {
-            PullResolver pullResolver = new PullResolver(this);
-            pullResolver.willingless = willingless;
-            return pullResolver;
-        }
-        return null;
-    }
 
     public void updateFuturDrones(int i) {
         futurDrones += i;
