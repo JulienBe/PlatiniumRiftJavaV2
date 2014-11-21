@@ -658,7 +658,7 @@ class Zone {
             }
         }
         value /= 1 + (futurDrones + drones[Player.myId]);
-        value /= 1 + adjacentZones.size();
+        value /= (1 + adjacentZones.size()) * 2;
         return value;
     }
 
