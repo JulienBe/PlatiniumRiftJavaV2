@@ -661,7 +661,7 @@ class Zone {
         for (Zone z : adjacentZones)
             dronesNearby += z.futurDrones;
         value /= 1 + dronesNearby;
-        value /= (1 + adjacentZones.size()) * 2;
+        value /= 1 + (adjacentZones.size() / 2);
         return value;
     }
 
