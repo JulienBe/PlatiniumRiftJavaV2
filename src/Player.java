@@ -232,7 +232,8 @@ class World {
         /**
          * REINFORCEMENT
          */
-//        reinforcement(commands);
+        if (Player.playerCount > 2)
+            reinforcement(commands);
 
         List<Zone> zonesWithDrones = new ArrayList<>();
         for (Continent c : disputed)
@@ -361,42 +362,29 @@ class World {
 
     void spawnDrones(int platinium) {
         List<CommandSpawn> commands = new ArrayList<>();
-        // defense
-//        platinium = defense(commands, platinium);
 
-        TreeSet<ContinentSpawnAnalytic> spawnAnalytics = new TreeSet<>();
-        for (Continent c : disputed)
-            spawnAnalytics.add(c.getSpawnAnalytics());
+        while (platinium >= Player.DRONE_COST) {
+            List<SpawnResolver> spawns = new ArrayList<>();
+            for (Continent c : disputed)
+                spawns.addAll(c.getSpawnAnalytics());
 
-        if (spawnAnalytics.isEmpty())
-            return;
-        while (platinium >= Player.DRONE_COST)
-            platinium = spawnDrone(platinium, commands, spawnAnalytics);
+            Collections.sort(spawns);
+            if (spawns.isEmpty())
+                break;
+            platinium = spawnDrone(platinium, commands, spawns.get(0));
+        }
 
         Utils.executeCommands(commands);
     }
 
-    private int spawnDrone(int platinum, List<CommandSpawn> commands, TreeSet<ContinentSpawnAnalytic> spawnAnalytics)    {
-
-        ContinentSpawnAnalytic spawnAnalytic = spawnAnalytics.pollFirst();
-        SpawnResolver candidate = spawnAnalytic.pollBest();
-
+    private int spawnDrone(int platinum, List<CommandSpawn> commands, SpawnResolver spawnResolver)    {
         CommandSpawn commandSpawn = new CommandSpawn();
         commandSpawn.drones = 1;
-//        if (Player.firstTurn)
-//            commandSpawn.drones++;
-        commandSpawn.to = candidate.zone.id;
-
-        candidate.magnetism *= SPAWN_ATTRACTION_DIMINISHING;
-        spawnAnalytic.continent.futurDrones += commandSpawn.drones;
-        if (spawnAnalytic.continent.futurDrones == 1)
-            spawnAnalytic.totalValue /= Continent.NO_DRONES_SPAWN_MULTI;
+        commandSpawn.to = spawnResolver.zone.id;
+        spawnResolver.zone.updateFuturDrones(1);
         commands.add(commandSpawn);
-        spawnAnalytic.addCandidate(candidate);
-        spawnAnalytics.add(spawnAnalytic);
         return platinum - Player.DRONE_COST;
     }
-
 
 }
 
@@ -477,15 +465,13 @@ class Continent {
      *           |_|
      */
 
-    public ContinentSpawnAnalytic getSpawnAnalytics() {
-        ContinentSpawnAnalytic spawnAnalytic = new ContinentSpawnAnalytic(this);
+    public List<SpawnResolver> getSpawnAnalytics() {
+        List<SpawnResolver> spawnResolvers = new ArrayList<>();
         for (Zone z : neutralZones.values())
-            spawnAnalytic.addCandidate(getSpawnResolver(z));
+            spawnResolvers.add(getSpawnResolver(z));
         for (Zone z : controlledZones.values())
-            spawnAnalytic.addCandidate(getSpawnResolver(z));
-        if (drones[Player.myId] == 0)
-            spawnAnalytic.totalValue *= NO_DRONES_SPAWN_MULTI;
-        return spawnAnalytic;
+            spawnResolvers.add(getSpawnResolver(z));
+        return spawnResolvers;
     }
 
     private SpawnResolver getSpawnResolver(Zone z) {
@@ -508,10 +494,7 @@ class Continent {
 class Zone {
 
     // SPAWN
-    private static final float
-            MULTI_PT_IF_FREE_N_NO_FUTURE_DRONE = 12,
-    //*2 => 52ème / 40.30
-    ADJACENT_ZONE_SIZE_DIV = 2;
+    private static final float MULTI_PT_IF_FREE_N_NO_FUTURE_DRONE = 12;
     // MVT
     private static final int MAX_DISTANCE = 7, MAX_DRONES = 5;
     static final Comparator<Zone> comparatorPlatinium = new Comparator<Zone>() {        public int compare(Zone o1, Zone o2) {            return o2.platinium - o1.platinium;        }    };
@@ -719,10 +702,10 @@ class Zone {
      * j'ai chipoté aussi dans le has enemies nearby, is mine etc, genre le value /= 2, enfin me semble... putain des commits
      **/
 
-    public int evaluateFreeZone(int otherPlayerActive) {
+    public float evaluateFreeZone(int otherPlayerActive) {
 //        if (Utils.allAdjacentAreMine(this) && Player.playerCount == 2)
 //            return -1;
-        int value = 0;
+        float value = 0;
 
         for (Zone z : adjacentWithRessources) {
             if (!Utils.hasEnemies(z) && !Utils.isMine(z)) {
@@ -739,7 +722,6 @@ class Zone {
         if (futurDrones == 0 && Utils.isFree(this))
             value += platinium * MULTI_PT_IF_FREE_N_NO_FUTURE_DRONE;
 
-
         value *= 7 - adjacentZones.size();
         if (Utils.isMine(this) && Utils.hasEnemiesNearby(this))
             value *= platinium + 1;
@@ -750,6 +732,10 @@ class Zone {
             value *= 2;
         if (continent.zones.size() < 50 && Player.playerCount > 2)
             value *= 2;
+        int dronesNearby = drones[Player.myId] + futurDrones + adjacentDrones[Player.myId];
+        for (Zone z : adjacentZones)
+            dronesNearby += z.futurDrones;
+        value /= 1 + dronesNearby * 20;
         return value;
     }
 
@@ -800,6 +786,7 @@ class Zone {
 
     public void updateFuturDrones(int i) {
         futurDrones += i;
+        continent.futurDrones += i;
     }
 
     public void updateDrones(int i) {
@@ -849,57 +836,24 @@ class MagnetismResolver implements Comparable<MagnetismResolver>{
         this.target = target;
     }
 
-    public MagnetismResolver() {
-    }
-
     @Override
     public int compareTo(MagnetismResolver o) {
         return (int) ((o.magnetism * 1000) - (magnetism * 1000));
     }
 }
 
-class ContinentSpawnAnalytic implements Comparable<ContinentSpawnAnalytic> {
-    TreeSet<SpawnResolver> candidates = new TreeSet<>();
-    int totalValue;
-    final Continent continent;
-
-    public ContinentSpawnAnalytic(Continent continent) {
-        this.continent = continent;
-    }
-
-    public void addCandidate(SpawnResolver spawnResolver) {
-        totalValue += spawnResolver.magnetism;
-        candidates.add(spawnResolver);
-    }
-
-    public SpawnResolver pollBest() {
-        SpawnResolver spawnResolver = candidates.pollFirst();
-        totalValue -= spawnResolver.magnetism;
-        return spawnResolver;
-    }
-
-    @Override
-    public int compareTo(ContinentSpawnAnalytic o) {
-        return (o.totalValue * 1000) - (totalValue * 1000);
-    }
-
-}
 
 class SpawnResolver implements Comparable<SpawnResolver> {
-    int magnetism;
+    float magnetism;
     final Zone zone;
 
     public SpawnResolver(Zone zone) {
         this.zone = zone;
     }
 
-    void reset() {
-        magnetism = -500;
-    }
-
     @Override
     public int compareTo(SpawnResolver o) {
-        return o.magnetism - magnetism;
+        return (int) ((o.magnetism * 100) - (magnetism * 100));
     }
 }
 
