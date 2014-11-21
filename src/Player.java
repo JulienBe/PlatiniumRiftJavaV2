@@ -660,8 +660,8 @@ class Zone {
         int dronesNearby = drones[Player.myId] + futurDrones + adjacentDrones[Player.myId];
         for (Zone z : adjacentZones)
             dronesNearby += z.futurDrones;
-        if (Player.playerCount > 2 && Utils.hasEnemiesNearby(this))
-            value /= 2;
+//        if (Player.playerCount > 2 && Utils.hasEnemiesNearby(this))
+//            value /= 2;
         value /= 1 + dronesNearby;
         value /= 1 + (adjacentZones.size());
         return value;
