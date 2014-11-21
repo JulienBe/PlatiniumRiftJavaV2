@@ -567,9 +567,8 @@ class Zone {
             adjacentMvt.fitness += z.platinium * 3;
             if (!Utils.isMine(z))
                 adjacentMvt.fitness++;
-            for (Zone z2 : z.adjacentWithRessources) {
-                if (!Utils.isMine(z2))
-                    adjacentMvt.fitness += z2.platinium;
+            for (Zone z2 : z.adjacentZones) {
+                adjacentMvt.fitness += z2.platinium;
             }
             possibilities.add(adjacentMvt);
         }
