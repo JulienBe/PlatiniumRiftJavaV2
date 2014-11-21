@@ -262,8 +262,8 @@ class World {
         Collections.sort(drones, new Comparator<Drone>() {
             @Override
             public int compare(Drone o1, Drone o2) {
-                int diff = o1.adjacentDestinations.size() - o2.adjacentDestinations.size();
-                return diff;
+            int diff = o1.adjacentDestinations.size() - o2.adjacentDestinations.size();
+            return diff;
             }
         });
 
@@ -564,7 +564,7 @@ class Zone {
         Collections.sort(possibilities, new Comparator<AdjacentMvt>() {
             @Override
             public int compare(AdjacentMvt o1, AdjacentMvt o2) {
-                return (int) ((o2.fitness * 1000) - (o1.fitness * 1000));
+            return (int) ((o2.fitness * 1000) - (o1.fitness * 1000));
             }
         });
         return possibilities;
@@ -649,33 +649,14 @@ class Zone {
     public float evaluateFreeZone(int otherPlayerActive) {
         if (Utils.allAdjacentAreMine(this))
             return -1;
-        float value = platinium * 4 / (1 + futurDrones);
-
+        float value = platinium * 4;
         for (Zone z : adjacentWithRessources) {
-            value += (z.platinium) / (1 + z.futurDrones);
-            if (!Utils.hasEnemiesNearby(z))
-                value += (z.platinium) / (1 + z.futurDrones);
+            if (!Utils.isMine(z)) {
+                value += z.platinium;
+                if (!Utils.hasEnemies(z))
+                    value += z.platinium;
+            }
         }
-
-        for (Zone z : adjacentOfAdjacentWithRessources)
-            if (!Utils.isMine(z) && !Utils.hasEnemies(z))
-                value += (z.platinium) / (1 + z.futurDrones);
-
-        value *= (7 - adjacentZones.size());
-
-        if (Utils.isMine(this) && Utils.hasEnemiesNearby(this))
-            value *= platinium + 1;
-        else
-            value /= Utils.getNbEnemieZonesNearby(this) + 1;
-        value /= futurDrones * 2 + 1;
-        if (continent.drones[Player.myId] == 0)
-            value *= 2;
-        if (continent.zones.size() < 50 && Player.playerCount > 2)
-            value *= 2;
-        int dronesNearby = drones[Player.myId] + futurDrones + adjacentDrones[Player.myId];
-        for (Zone z : adjacentZones)
-            dronesNearby += z.futurDrones;
-        value /= 1 + dronesNearby;
         return value;
     }
 
