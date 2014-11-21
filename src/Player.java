@@ -292,7 +292,6 @@ class World {
         origin.updateDrones(-1);
     }
 
-
     /***
      *     _____
      *    /  ___|
@@ -317,7 +316,6 @@ class World {
                 break;
             platinium = spawnDrone(platinium, commands, spawns.get(0));
         }
-
         Utils.executeCommands(commands);
     }
 
@@ -665,10 +663,6 @@ class Zone {
         value /= 1 + dronesNearby;
         value /= 1 + (adjacentZones.size());
         return value;
-    }
-
-    public boolean shouldDefend() {
-        return platinium > 0 && Utils.hasEnemiesNearby(this);
     }
 
     public int podsToKeep() {
