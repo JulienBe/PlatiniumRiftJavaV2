@@ -262,8 +262,8 @@ class World {
         Collections.sort(drones, new Comparator<Drone>() {
             @Override
             public int compare(Drone o1, Drone o2) {
-                int diff = o1.adjacentDestinations.size() - o2.adjacentDestinations.size();
-                return diff;
+            int diff = o1.adjacentDestinations.size() - o2.adjacentDestinations.size();
+            return diff;
             }
         });
 
@@ -593,7 +593,7 @@ class Zone {
             Collections.sort(candidates, new Comparator<MagnetismResolver>() {
                 @Override
                 public int compare(MagnetismResolver o1, MagnetismResolver o2) {
-                    return (int) ((o2.magnetism * 100) - (o1.magnetism * 100));
+                return (int) ((o2.magnetism * 100) - (o1.magnetism * 100));
                 }
             });
             return candidates.get(0);
