@@ -443,7 +443,7 @@ class Zone {
     // SPAWN
     private static final float MULTI_PT_IF_FREE_N_NO_FUTURE_DRONE = 12;
     // MVT
-    private static final int MAX_DISTANCE = 7, MAX_DRONES = 5;
+    private static final int MAX_DISTANCE = 8, MAX_DRONES = 5;
     static final Comparator<Zone> comparatorPlatinium = new Comparator<Zone>() {        public int compare(Zone o1, Zone o2) {            return o2.platinium - o1.platinium;        }    };
 
     ZoneStatus status = ZoneStatus.NEUTRAL;
@@ -544,16 +544,6 @@ class Zone {
         adjacentPossibilities.addAll(getDronePossibleAdjacentDestinations());
     }
 
-    public List<Drone> getDronesWithAdjacentMvt() {
-        List<Drone> dronesList = new ArrayList<>();
-        for (int i = 0; i < drones[Player.myId]; i++) {
-            Drone drone = new Drone(this);
-            drone.adjacentDestinations.addAll(getDronePossibleAdjacentDestinations());
-            dronesList.add(drone);
-        }
-        return dronesList;
-    }
-
     private List<AdjacentMvt> getDronePossibleAdjacentDestinations() {
         List<AdjacentMvt> possibilities = new ArrayList<>();
         if (platinium > 0 && Utils.hasEnemiesNearby(this) && drones[Player.myId] < Utils.getNbEnemyDronesNearby(this) + 2)
@@ -574,8 +564,12 @@ class Zone {
                 adjacentMvt.fitness++;
             else if (Utils.hasEnemiesNearby(z) && z.getDrones() == 0)
                 adjacentMvt.fitness = platinium * 3;
-            for (Zone z2 : z.adjacentZones)
-                adjacentMvt.fitness += z2.platinium;
+            for (Zone z2 : z.adjacentZones) {
+                if (!Utils.isMine(z2))
+                    adjacentMvt.fitness += z2.platinium;
+                else
+                    adjacentMvt.fitness += z2.platinium / 2;
+            }
 
             adjacentMvt.fitness /= 1 + (Utils.getNbEnemieZonesNearby(z) * (Player.playerCount - 1));
 
@@ -688,13 +682,15 @@ class Zone {
 //        if (Player.playerCount > 2 && Utils.hasEnemiesNearby(this))
 //            value /= 2;
         // Player count : the more player, the more small continents will be important
-        float percentage = (float) (-continent.futurDrones + (Player.playerCount - 1) + continent.controlledZones.size()) / (float)( continent.zones.size() + continent.futurDrones);
+        float percentage = (float) (-continent.futurDrones + (Player.playerCount - 3) + continent.controlledZones.size()) / (float)( continent.zones.size() + continent.futurDrones);
 //        if (continent.drones[Player.myId] == 0)
 //            value *= 2;
         if (Utils.isFree(this)) {
             value *= 2;
             value += platinium * 2;
         }
+        if (Player.firstTurn)
+            value += continent.ressources;
         value *= 1 + percentage;
         value /= 1 + dronesNearby;
         value /= 1 + (adjacentZones.size());
