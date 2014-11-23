@@ -10,7 +10,6 @@ import java.util.*;
  */
 class Player {
 
-    static final float FIRST_TURN_DIVISION = 2;
     // Je veux du java 8 bordel !
     private static long longestUpdate = 0, longestSpawn = 0, longestMvt = 0;
     public static final int DRONE_COST = 20;
@@ -244,9 +243,8 @@ class World {
 
     private void distantMvt(List<CommandMvt> commands, List<Zone> zonesWithDrones) {
         for (Zone origin : zonesWithDrones) {
-            int i = origin.podsToKeep();
             int drones = origin.getDrones();
-            for (i = 0; i < drones; i++) {
+            for (int i = 0; i < drones; i++) {
                 MagnetismResolver magnetismResolver = origin.getDistantToGoTo();
                 if (magnetismResolver != null) {
                     sendDrone(commands, origin, magnetismResolver.adjacent);
@@ -348,17 +346,15 @@ class World {
 
 class Continent {
 
-    static final float NO_DRONES_SPAWN_MULTI = 1;
     int ressources = 0, futurDrones = 0, otherPlayersActive;
     int[] drones = new int[4];
     ContinentStatus status = ContinentStatus.DISPUTED;
-    Map<Integer, Zone> zones = new HashMap<>(), neutralZones = new HashMap<>(), hostileZones = new HashMap<>(), controlledZones = new HashMap<>();
-    List<Zone> zoneWithDrones = new ArrayList<>(), zoneWithRessources = new ArrayList<>();
-    int group = 0;
+    Map<Integer, Zone> zones = new HashMap<>();
+    List<Zone> zoneWithDrones = new ArrayList<>(), zoneWithRessources = new ArrayList<>(), neutralZones = new ArrayList<>(), hostileZones = new ArrayList<>(), controlledZones = new ArrayList<>();
 
     void addZone(Zone z) {
         zones.put(z.id, z);
-        neutralZones.put(z.id, z);
+        neutralZones.add(z);
         ressources += z.platinium;
         z.continent = this;
         if (z.platinium > 0)
@@ -372,10 +368,9 @@ class Continent {
 
     public void update() {
         for (int i = 0; i < drones.length; i++)
-            drones[i] += 0;
+            drones[i] = 0;
         futurDrones = 0;
         zoneWithDrones.clear();
-        group = 0;
     }
     /**
      * @return true if the zone has been updated
@@ -391,7 +386,7 @@ class Continent {
             drones[1] += podsP1;
             drones[2] += podsP2;
             drones[3] += podsP3;
-            if (zone.drones[Player.myId] > 0)
+            if (zone.getDrones() > 0)
                 zoneWithDrones.add(zone);
             return true;
         }
@@ -402,7 +397,6 @@ class Continent {
         otherPlayersActive = Utils.getOtherPlayerActive(drones);
         for (Zone z : zones.values())
             z.updateFinished();
-
     }
 
     /***
@@ -415,9 +409,9 @@ class Continent {
 
     public List<SpawnResolver> getSpawnAnalytics() {
         List<SpawnResolver> spawnResolvers = new ArrayList<>();
-        for (Zone z : neutralZones.values())
+        for (Zone z : neutralZones)
             spawnResolvers.add(getSpawnResolver(z));
-        for (Zone z : controlledZones.values())
+        for (Zone z : controlledZones)
             spawnResolvers.add(getSpawnResolver(z));
         return spawnResolvers;
     }
@@ -440,11 +434,7 @@ class Continent {
 
 class Zone {
 
-    // SPAWN
-    private static final float MULTI_PT_IF_FREE_N_NO_FUTURE_DRONE = 12;
-    // MVT
-    private static final int MAX_DISTANCE = 8, MAX_DRONES = 5;
-    static final Comparator<Zone> comparatorPlatinium = new Comparator<Zone>() {        public int compare(Zone o1, Zone o2) {            return o2.platinium - o1.platinium;        }    };
+    private static final int MAX_DISTANCE = 8;
 
     ZoneStatus status = ZoneStatus.NEUTRAL;
     // /!\
@@ -593,7 +583,7 @@ class Zone {
         }
         List<MagnetismResolver> candidates = new ArrayList<>();
         for (Zone z : adjacentZones)
-            z.examineZone(getDrones(), candidates, z, id);
+            z.examineZone(candidates, z, id);
         if (candidates.size() > 0) {
             Collections.sort(candidates, new Comparator<MagnetismResolver>() {
                 @Override
@@ -606,7 +596,7 @@ class Zone {
         return null;
     }
 
-    private void examineZone(int drones, List<MagnetismResolver> candidates, Zone adjacent, int... ids) {
+    private void examineZone(List<MagnetismResolver> candidates, Zone adjacent, int... ids) {
         for (int i : ids)
             if (i == id)
                 return;
@@ -622,7 +612,7 @@ class Zone {
             return;
 
         for (Zone z : adjacentZones)
-            z.examineZone(drones, candidates, adjacent, newIds);
+            z.examineZone(candidates, adjacent, newIds);
     }
 
     private float getMagnetism() {
@@ -919,11 +909,11 @@ class Utils {
 
 
     public static void zoneStatusChanged(Continent continent, ZoneStatus previousStatus, ZoneStatus newStatus, Zone zone) {
-        Utils.getMap(continent, previousStatus).remove(zone.id);
-        Utils.getMap(continent, newStatus).put(zone.id, zone);
+        Utils.getMap(continent, previousStatus).remove(zone);
+        Utils.getMap(continent, newStatus).add(zone);
     }
 
-    private static Map<Integer, Zone> getMap(Continent continent, ZoneStatus status) {
+    private static List<Zone> getMap(Continent continent, ZoneStatus status) {
         switch (status) {
             case CONTROLLED:    return continent.controlledZones;
             case HOSTILE:       return continent.hostileZones;
@@ -938,14 +928,6 @@ class Utils {
             continent.status = ContinentStatus.HOSTILE;
         else continent.status = ContinentStatus.DISPUTED;
         return continent.status;
-    }
-
-    public static boolean hasNeutralZones(Continent continent) {
-        return continent.neutralZones.values().size() > 0;
-    }
-
-    public static boolean hasZoneOnContinent(Continent continent) {
-        return !(continent.neutralZones.size() == continent.zones.size());
     }
 
     public static boolean hasLessDronesThanEnemies(Continent continent) {
@@ -966,33 +948,6 @@ class Utils {
             for (int i = 0; i < 4; i++)
                 totalDrones[i] += z.drones[i];
         return totalDrones;
-    }
-
-    public static Collection<? extends Zone> getNeutralZoneWithPlatinium(Continent continent) {
-        List<Zone> zones = new ArrayList<>();
-        for (Zone z : continent.neutralZones.values())
-            if (z.platinium > 0)
-                zones.add(z);
-        return zones;
-    }
-
-    public static Collection<? extends Zone> getNeutralZoneBorder(Continent continent) {
-        List<Zone> zones = new ArrayList<>();
-        for (Zone z : continent.neutralZones.values())
-            if (Utils.isBorder(z))
-                zones.add(z);
-        return zones;
-    }
-
-    public static Zone getCorner(Continent continent, int i) {
-        for (Zone z : continent.zones.values())
-            if (z.adjacentZones.size() == i)
-                return z;
-        return null;
-    }
-
-    public static boolean iHaveNoDrones(Continent continent, int[] drones) {
-        return drones[Player.myId] == 0;
     }
 
     /***
@@ -1019,18 +974,6 @@ class Utils {
             System.out.println(commandsOutput.toString());
         } else
             System.out.println("WAIT");
-    }
-
-    public static Continent getContinentWithMoreRessources(List<Continent> continents) {
-        int best = 0;
-        Continent continent = null;
-        for (Continent c : continents) {
-            if (c.ressources > best) {
-                continent = c;
-                best = c.ressources;
-            }
-        }
-        return continent;
     }
 
     public static int getOtherPlayerActive(int[] drones) {
