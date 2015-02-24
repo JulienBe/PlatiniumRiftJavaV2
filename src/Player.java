@@ -605,7 +605,7 @@ class Zone {
     }
 
     private boolean fabianStrategy() {
-        return (Utils.hasEnemies(this) && Player.playerCount > 2 && drones[Player.myId] < 4);
+        return Utils.hasEnemies(this) && Player.playerCount > 2 && drones[Player.myId] < 4;
     }
 
     private boolean notAnInterstingTarget() {
@@ -650,8 +650,7 @@ class Zone {
     }
 
     public MagnetismResolver getDistantToGoTo() {
-        if (platinium > 0)
-            if (Utils.hasEnemiesNearby(this) && futureDrones < Utils.getNbEnemyDronesNearby(this))
+        if (platinium > 0 && Utils.hasEnemiesNearby(this) && futureDrones < Utils.getNbEnemyDronesNearby(this))
                 return null;
 
         List<MagnetismResolver> candidates = new ArrayList<>();
@@ -659,7 +658,7 @@ class Zone {
         for (Zone z : adjacentZones)
             z.determinePath(0, candidates, z, id);
 
-        if (candidates.size() > 0) {
+        if (candidates.isEmpty()) {
             Collections.sort(candidates, new Comparator<MagnetismResolver>() {
                 @Override
                 public int compare(MagnetismResolver o1, MagnetismResolver o2) {
@@ -995,7 +994,7 @@ class Utils {
 
     private static boolean txt = true;
     public static void executeCommands(List commands) {
-        if (commands.size() > 0) {
+        if (commands.isEmpty()) {
             StringBuilder commandsOutput = new StringBuilder();
             for (Object c : commands)
                 commandsOutput.append(c.toString());
